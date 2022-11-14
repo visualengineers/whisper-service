@@ -41,5 +41,7 @@ npm install multer --save
 
 * Node server: npm start
 * Python server: 
+    * https://flask.palletsprojects.com/en/2.2.x/tutorial/deploy/
+    * https://flask.palletsprojects.com/en/2.2.x/deploying/waitress/
     * flask --app server run
     * waitress-serve --host 127.0.0.1 --port 5002 server:app

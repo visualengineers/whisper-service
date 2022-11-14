@@ -19,6 +19,7 @@ whisperCommand = '/Users/kammer/opt/miniconda3/bin/whisper'
 def hello_world():
     return "<p>Hello, World!</p>"
 
+# https://flask.palletsprojects.com/en/2.2.x/quickstart/
 @app.route('/whisper', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -45,11 +46,14 @@ def login():
 
             stream = os.popen(whisperCommand + ' ' + file + ' --model ' + model + ' --output_dir ./tmp --language ' + lang + ' --fp16 False')
             output = stream.read()
+
+            # https://www.pythontutorial.net/python-basics/python-read-text-file/
             with open(file + '.txt') as f:
                 contents = f.read()
         except:
             print("An exception occured")
         finally:
+            # https://pynative.com/python-delete-files-and-directories/#h-delete-all-files-from-a-directory
             for file_name in os.listdir(TMP_PATH):
                 # construct full file path
                 file = os.path.join(TMP_PATH, file_name)

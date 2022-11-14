@@ -1,3 +1,6 @@
+// https://www.tutorialspoint.com/nodejs/nodejs_express_framework.htm
+// https://www.npmjs.com/package/multer
+
 const express = require('express');
 const multer  = require('multer');
 const fs = require('fs');
@@ -34,6 +37,7 @@ app.post('/stats', upload.single('uploaded_file'), function (req, res) {
     return;
    }
 
+   // https://stackabuse.com/executing-shell-commands-with-node-js/
    exec("whisper " + req.file.path + " --output_dir ./tmp/" + " --model tiny" + " --language de --fp16 False", (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
@@ -44,6 +48,7 @@ app.post('/stats', upload.single('uploaded_file'), function (req, res) {
         }
         console.log(`stdout: ${stdout}`);
 
+        // https://stackoverflow.com/questions/9168737/read-a-text-file-using-node-js
         fs.readFile("." + req.file.path + ".txt", 'utf8', function(err, data) {
             if (err) throw err;
             console.log(data);
