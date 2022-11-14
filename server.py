@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask import request
 from flask import render_template
 import random
@@ -10,6 +11,8 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 TMP_PATH = os.path.join(script_dir, 'tmp')
 
 app = Flask(__name__)
+CORS(app)
+
 whisperCommand = '/Users/kammer/opt/miniconda3/bin/whisper'
 
 @app.route("/")
