@@ -1,0 +1,26 @@
+{
+    "name": "whisper-service",
+    "version": "0.1.0",
+    "description": "This is a small server to deliver whisper speech to text.",
+    "engines": {
+      "node": "18.x"
+    },
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js"
+    },
+    "dependencies": {
+      "body-parser": "^1.20.1",
+      "cors": "^2.8.5",
+      "ejs": "^3.1.5",
+      "express": "^4.15.2",
+      "express-ipfilter": "^1.2.0",
+      "json2csv": "^5.0.6",
+      "multer": "^1.4.5-lts.1"
+    },
+    "devDependencies": {
+      "got": "^11.3.0",
+      "tape": "^4.7.0"
+    },
+    "license": "MIT"
+  }

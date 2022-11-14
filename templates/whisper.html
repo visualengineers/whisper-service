@@ -1,0 +1,10 @@
+<!doctype html>
+<title>Hello from Flask</title>
+<form action="/whisper" enctype="multipart/form-data" method="post">
+    <div class="form-group">
+      <input type="file" class="form-control-file" name="uploaded_file">
+      <input type="text" class="form-control" placeholder="tiny" name="model">
+      <input type="text" class="form-control" placeholder="de" name="language">
+      <input type="submit" value="Transcribe" class="btn btn-default">            
+    </div>
+  </form>
