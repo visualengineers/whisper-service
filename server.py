@@ -13,7 +13,7 @@ TMP_PATH = os.path.join(script_dir, 'tmp')
 app = Flask(__name__)
 CORS(app)
 
-whisperCommand = '/Users/kammer/opt/miniconda3/bin/whisper'
+whisperCommand = '/usr/local/bin/whisper'
 
 @app.route("/")
 def hello_world():
@@ -21,7 +21,7 @@ def hello_world():
 
 # https://flask.palletsprojects.com/en/2.2.x/quickstart/
 @app.route('/whisper', methods=['GET', 'POST'])
-def login():
+def whisper():
     if request.method == 'POST':
         contents = ''
         try:
@@ -41,11 +41,12 @@ def login():
             letters = string.ascii_lowercase
             filename = ''.join(random.choice(letters) for i in range(32))
             extension = f.filename.split('.').pop()
-            file = os.path.abspath(os.getcwd()) + '/tmp/'+filename+'.'+extension
+            file = TMP_PATH + '/' +  filename + '.' + extension
             f.save(file)
 
-            stream = os.popen(whisperCommand + ' ' + file + ' --model ' + model + ' --output_dir ./tmp --language ' + lang + ' --fp16 False')
+            stream = os.popen(whisperCommand + ' ' + file + ' --model ' + model + ' --output_dir ' + TMP_PATH + ' --language ' + lang + ' --fp16 False')
             output = stream.read()
+            print(output)
 
             # https://www.pythontutorial.net/python-basics/python-read-text-file/
             with open(file + '.txt') as f:

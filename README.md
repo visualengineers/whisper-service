@@ -1,7 +1,10 @@
 # Whisper Service
+
 This is a small server to deliver [whisper](https://openai.com/blog/whisper/) speech to text.
 
 # Prerequisites on the server
+
+Docker
 
 ## Install Whisper as command line tool
 
@@ -44,4 +47,7 @@ npm install multer --save
     * https://flask.palletsprojects.com/en/2.2.x/tutorial/deploy/
     * https://flask.palletsprojects.com/en/2.2.x/deploying/waitress/
     * flask --app server run
-    * waitress-serve --host 127.0.0.1 --port 5002 server:app
+    * waitress-serve --host 0.0.0.0 --port 5002 server:app
+
+* docker build . -t kammer/whisper-service
+* docker run --name=whisper-server -p=5002:80 kammer/whisper-service
