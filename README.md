@@ -4,11 +4,13 @@ This is a small server to deliver [whisper](https://openai.com/blog/whisper/) sp
 
 # Prerequisites on the server
 
-Docker
+Docker must be installed on the system to deploy the server to an image.
 
-## Install Whisper as command line tool
+# Development
 
-Follow the instructions on the [Whisker Github Page](https://github.com/openai/whisper).
+## Python server
+
+In order to test whisper locally on your system, you need to follow the steps on the [Whisker Github Page](https://github.com/openai/whisper):
 
 * Install Python (at least version 3.7 or higher)
 
@@ -18,21 +20,33 @@ Follow the instructions on the [Whisker Github Page](https://github.com/openai/w
 sudo apt update && sudo apt install ffmpeg
 ```
 
-* Install Whisper, e.g.
+* Install Whisper
 
 ```
 pip install git+https://github.com/openai/whisper.git 
 ``` 
-/usr/local/python/
-## Install flask
+
+For the development of the server application, Python and pip are needed. The server is developed with flask. Dependencies can be installed using the `requirements.txt` file and pip:
 
 ```
-pip install flask
+pip install -r requirements.txt
 ```
 
-## Install Node.js
+See tutorials on developing a flask web server with python:
 
-* Install express and dependencies
+* https://flask.palletsprojects.com/en/2.2.x/tutorial/deploy/
+* https://flask.palletsprojects.com/en/2.2.x/deploying/waitress/
+
+Run the server locally either in development mode or in production (e.g. with waitress):
+
+```
+flask --app server run
+waitress-serve --host 0.0.0.0 --port 5002 server:app
+```
+
+## Node server
+
+There is an experimental node server for which you need to install Node.js and the required dependencies:
 
 ```
 npm install express --save
@@ -40,14 +54,17 @@ npm install body-parser --save
 npm install multer --save
 ```
 
-# Run the server
+To start the server, use the common command:
 
-* Node server: npm start
-* Python server: 
-    * https://flask.palletsprojects.com/en/2.2.x/tutorial/deploy/
-    * https://flask.palletsprojects.com/en/2.2.x/deploying/waitress/
-    * flask --app server run
-    * waitress-serve --host 0.0.0.0 --port 5002 server:app
+```
+npm start
+```
 
-* docker build . -t kammer/whisper-service
-* docker run --name=whisper-server -p=5002:80 kammer/whisper-service
+# Deployment
+
+Build and deploy the Python web server version with the provided Docker file using the following commands:
+
+```
+docker build . -t kammer/whisper-service
+docker run --name=whisper-server -d -p=5002:80 visualengineers/whisper-service
+```
