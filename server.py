@@ -13,7 +13,7 @@ TMP_PATH = os.path.join(script_dir, 'tmp')
 app = Flask(__name__)
 CORS(app)
 
-whisperCommand = '/usr/local/bin/whisper'
+whisperCommand = os.getenv('WHISPER_PATH')
 
 @app.route("/")
 def hello_world():

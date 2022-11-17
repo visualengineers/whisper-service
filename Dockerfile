@@ -4,6 +4,8 @@ WORKDIR /app
 RUN apt update -y && apt install ffmpeg -y
 RUN pip install git+https://github.com/openai/whisper.git 
 
+ENV WHISPER_PATH /usr/local/bin/whisper
+
 # We copy just the requirements.txt first to leverage Docker cache
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
