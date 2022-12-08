@@ -65,8 +65,8 @@ npm start
 Build and deploy the Python web server version with the provided Docker file using the following commands:
 
 ```
-docker build . -t kammer/whisper-service
-docker run --name=whisper-server -d -p=5002:80 visualengineers/whisper-service
+$ docker build . -t visualengineers/whisper-service
+$ docker run --name=whisper-server -d -p=5002:80 --restart always visualengineers/whisper-service
 ```
 
 # Usage
