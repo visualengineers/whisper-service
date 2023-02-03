@@ -12,4 +12,7 @@ RUN pip install -r requirements.txt
 COPY . .
 EXPOSE 80
 
+HEALTHCHECK --interval=5m --timeout=3s \
+  CMD curl -f http://localhost/ || exit 1
+
 CMD [ "waitress-serve", "--host", "0.0.0.0", "--port", "80", "server:app" ]
