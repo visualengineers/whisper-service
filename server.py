@@ -42,14 +42,15 @@ def whisper():
             filename = ''.join(random.choice(letters) for i in range(32))
             extension = f.filename.split('.').pop()
             file = TMP_PATH + '/' +  filename + '.' + extension
+            resultFile = TMP_PATH + '/' +  filename + '.txt'
             f.save(file)
 
-            stream = os.popen(whisperCommand + ' ' + file + ' --model ' + model + ' --output_dir ' + TMP_PATH + ' --language ' + lang + ' --fp16 False')
+            stream = os.popen(whisperCommand + ' ' + file + ' --model ' + model + ' --output_dir ' + TMP_PATH + ' --language ' + lang + ' --output_format txt' + ' --fp16 False')
             output = stream.read()
             print(output)
 
             # https://www.pythontutorial.net/python-basics/python-read-text-file/
-            with open(file + '.txt') as f:
+            with open(resultFile) as f:
                 contents = f.read()
         except:
             print("An exception occured")
