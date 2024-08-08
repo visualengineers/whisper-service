@@ -54,6 +54,7 @@ def whisper():
                 contents = f.read()
         except:
             print("An exception occured")
+            contents = 'Server Error'
         finally:
             # https://pynative.com/python-delete-files-and-directories/#h-delete-all-files-from-a-directory
             for file_name in os.listdir(TMP_PATH):
