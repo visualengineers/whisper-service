@@ -5,6 +5,7 @@ from flask import render_template
 import random
 import string
 import os
+import speech_recognition as sr
 
 # define global variables
 script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -15,17 +16,50 @@ CORS(app)
 
 whisperCommand = os.getenv('WHISPER_PATH')
 
+def saveFile(f):
+    letters = string.ascii_lowercase
+    filename = ''.join(random.choice(letters) for i in range(32))
+    extension = f.filename.split('.').pop()
+    file = TMP_PATH + '/' +  filename + '.' + extension
+    f.save(file)
+    return file
+
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"
 
+# https://github.com/Uberi/speech_recognition/
+@app.route('/google', methods=['GET', 'POST'])
+def google():
+    if request.method == 'POST':
+        file = saveFile(request.files['uploaded_file'])
+
+        # use the audio file as the audio source
+        r = sr.Recognizer()
+        with sr.AudioFile(file) as source:
+            audio = r.record(source)  # read the entire audio file
+
+        # recognize speech using Google Speech Recognition
+        try:
+            # for testing purposes, we're just using the default API key
+            # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
+            # instead of `r.recognize_google(audio)`
+            transcript = r.recognize_google(audio)
+            print(transcript)
+            return transcript
+        except sr.UnknownValueError:
+            return "Google Speech Recognition could not understand audio"
+        except sr.RequestError as e:
+            return "Could not request results from Google Speech Recognition service; {0}".format(e)
+    else:
+        return render_template('google.html')
+    
 # https://flask.palletsprojects.com/en/2.2.x/quickstart/
 @app.route('/whisper', methods=['GET', 'POST'])
 def whisper():
     if request.method == 'POST':
         contents = ''
         try:
-            f = request.files['uploaded_file']
             model = 'tiny'
             if 'model' in request.form.keys():
                 model = request.form['model'].strip()
@@ -38,12 +72,9 @@ def whisper():
                 lang = 'de'
             if not('audio' in f.mimetype):
                 return "Error Filetype"
-            letters = string.ascii_lowercase
-            filename = ''.join(random.choice(letters) for i in range(32))
-            extension = f.filename.split('.').pop()
-            file = TMP_PATH + '/' +  filename + '.' + extension
-            resultFile = TMP_PATH + '/' +  filename + '.txt'
-            f.save(file)
+            
+            file = saveFile(request.files['uploaded_file'])
+            resultFile = file + '.txt'
 
             stream = os.popen(whisperCommand + ' ' + file + ' --model ' + model + ' --output_dir ' + TMP_PATH + ' --language ' + lang + ' --output_format txt' + ' --fp16 False')
             output = stream.read()
