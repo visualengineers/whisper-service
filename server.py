@@ -16,6 +16,14 @@ CORS(app)
 
 whisperCommand = os.getenv('WHISPER_PATH')
 
+def cleanUp():
+    # https://pynative.com/python-delete-files-and-directories/#h-delete-all-files-from-a-directory
+    for file_name in os.listdir(TMP_PATH):
+        # construct full file path
+        file = os.path.join(TMP_PATH, file_name)
+        if os.path.isfile(file) and file_name != '.gitkeep':
+            os.remove(file)
+
 def saveFile(f):
     letters = string.ascii_lowercase
     filename = ''.join(random.choice(letters) for i in range(32))
@@ -51,6 +59,8 @@ def google():
             return "Google Speech Recognition could not understand audio"
         except sr.RequestError as e:
             return "Could not request results from Google Speech Recognition service; {0}".format(e)
+        finally:
+            cleanUp()
     else:
         return render_template('google.html')
     
@@ -70,11 +80,12 @@ def whisper():
                 lang = request.form['language'].strip()
             if lang == '':
                 lang = 'de'
-            if not('audio' in f.mimetype):
-                return "Error Filetype"
             
-            file = saveFile(request.files['uploaded_file'])
-            resultFile = file + '.txt'
+            f = request.files['uploaded_file']
+            if not('audio' in f.mimetype):
+                return "Error Filetype"            
+            file = saveFile(f)
+            resultFile = file.split('.')[0] + '.txt'
 
             stream = os.popen(whisperCommand + ' ' + file + ' --model ' + model + ' --output_dir ' + TMP_PATH + ' --language ' + lang + ' --output_format txt' + ' --fp16 False')
             output = stream.read()
@@ -87,12 +98,7 @@ def whisper():
             print("An exception occured")
             contents = 'Server Error'
         finally:
-            # https://pynative.com/python-delete-files-and-directories/#h-delete-all-files-from-a-directory
-            for file_name in os.listdir(TMP_PATH):
-                # construct full file path
-                file = os.path.join(TMP_PATH, file_name)
-                if os.path.isfile(file) and file_name != '.gitkeep':
-                    os.remove(file)
+            cleanUp()
 
         return contents
     else:

@@ -1,0 +1,8 @@
+services:
+  flask:
+    container_name: whisperservice
+    # docker files cannot reference elements in parent directory, therefore context specifies the working directory
+    build: .
+    restart: always
+    ports: 
+      - '5002:80'

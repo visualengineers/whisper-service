@@ -2,6 +2,7 @@ FROM python:3
 WORKDIR /app
 
 RUN apt update -y && apt install ffmpeg -y
+RUN apt-get install flac
 RUN pip install numba
 RUN pip install tiktoken
 RUN pip install git+https://github.com/openai/whisper.git 
